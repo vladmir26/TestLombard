@@ -13,7 +13,7 @@ const headers = new Headers({
 
 const requestBodyId = {
   "action": "get_ids",
-	"params": {"offset": 10, "limit": 100}
+	"params": {"offset": 10, "limit": 50}
 };
 
 
@@ -79,7 +79,7 @@ useProductID(url)
 
 function addList (products) {
 products.forEach(product => {
-  const productList = document.getElementById("product");
+  const productList = document.getElementById("products");
     const listItem = document.createElement("li");
 
     const id = document.createElement('p');
@@ -90,8 +90,15 @@ products.forEach(product => {
     const nameElement = document.createElement("p");
     nameElement.textContent = `Название: ${product.product}`;
 
+
     const brandElement = document.createElement("p");
-    brandElement.textContent = `Бренд: ${product.brand}`;
+
+    if (product.brand != null) {
+         brandElement.textContent = `Бренд: ${product.brand}`;
+    } else {
+         brandElement.textContent = `Бренд: `;
+    }
+
 
     listItem.appendChild(id);
     listItem.appendChild(nameElement);
@@ -99,5 +106,7 @@ products.forEach(product => {
     listItem.appendChild(brandElement);
 
     productList.appendChild(listItem);
+    listItem.classList.add('product-item')
+    
 })
 }
