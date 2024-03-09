@@ -33,17 +33,21 @@ input, textarea, button {
 
 .container {
     max-width: 1300px;
-    margin-right: 86px;
-    margin-left: 86px;
+    margin: 0 auto;
+    padding-right: 86px;
+    padding-left: 86px;
 }
 
 .products-list {
     display: flex;
     flex-wrap: wrap;
-
+    gap: 20px
 }
 
 .product-item {
     max-width: 400px;
-    padding-left: 10px;
+    flex-grow: 0;
+    width: 100%;
+    flex-basis: 400px;
+    box-sizing: border-box;
 }
