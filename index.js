@@ -16,7 +16,3 @@ function renderList (products) {
   const cardsInstance = new Carts(products)
   productContainer.appendChild(cardsInstance.listNode);
 }
-
-
-
-

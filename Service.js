@@ -1,48 +1,60 @@
+
+
 export default class Service {
     _products = []
     url = 'https://api.valantis.store:41000/'
-    password = 'Valantis'
-    timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    authString = `${this.password}_${this.timestamp}`;
-    xAuth = md5(this.authString);
+    headers = {}
 
-    headers = new Headers({
-        'X-Auth': this.xAuth,
-        'Content-Type': 'application/json'
-     });
-
-    requestBodyId = {
-        "action": "get_ids",
-        "params": {"offset": 10, "limit": 50}
-       };
-    requestBody = {
-        action: 'get_items',
-        params: {"ids": this.getProductIds()}
-      };
+    constructor() {
+      this.initHeaders()
+    }
 
     get products() {
         return this._products
     }
 
+    set products(products) {
+      this._products = products
+    }
+
+    initHeaders() {
+      const password = 'Valantis'
+      const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+      const authString = `${password}_${timestamp}`;
+      const xAuth = md5(authString);
+
+      this.headers = new Headers({
+        'X-Auth': xAuth,
+        'Content-Type': 'application/json'
+     });
+    }
+    
     async render() {
         const productIds = await this.getProductIds()
-        this._products  = await this.getProductData(productIds)
+        console.log(productIds)
+        this.products  = await this.getProductData(productIds)
     }
 
     async getProductIds() {
+      const requestBodyId = {
+        "action": "get_ids",
+        "params": {"offset": 10, "limit": 50}
+      };
 
-        fetch(this.url, {
+      return await fetch(this.url, {
             method: 'POST',
             headers: this.headers,
-            body: JSON.stringify(this.requestBodyId)
+            body: JSON.stringify(requestBodyId)
           })
           .then(response => {
+            console.log(response)
             if (!response.ok) {
               throw new Error('Network response was not ok');
             }
             return response.json();
           })
           .then(data => {
+            console.log(data)
             return data.result;
           })
           .catch(error => {
@@ -51,12 +63,15 @@ export default class Service {
 
     }
 
-    async getProductData() {
-          
-          fetch(this.url, {
+    async getProductData(getProductIds) {
+      const requestBody = {
+        action: 'get_items',
+        params: {"ids": getProductIds}
+      };
+      return await fetch(this.url, {
             method: 'POST',
             headers: this.headers,
-            body: JSON.stringify(this.requestBody)
+            body: JSON.stringify(requestBody)
           })
           .then(response => {
             if (!response.ok) {
@@ -71,6 +86,4 @@ export default class Service {
             console.error('There has been a problem with your fetch operation:', error);
           })
           }
-
-    }
-
+}

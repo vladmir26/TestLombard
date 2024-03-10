@@ -1,6 +1,5 @@
 export default class Carts {
     cardList = ''
-    products = []
     constructor(products) {
         this.products = products
     }
